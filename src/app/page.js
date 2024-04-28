@@ -2,6 +2,9 @@
 
 import { useState } from "react";
 import style from "./page.module.css";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 export default function page() {
   const [guess, setGuess] = useState("");
   const [guessingArray, setGuessingArray] = useState([]);
@@ -9,7 +12,7 @@ export default function page() {
   const [guessNo, setGuessNo] = useState(Math.floor(Math.random() * 100));
   const [message, setMessage] = useState("");
   const [gamePlay, setGamePlay] = useState(true);
-  console.log(guessNo);
+  console.log("gues", guessNo);
   const startGame = () => {
     setGamePlay(true);
     setAttempts(10);
@@ -20,9 +23,9 @@ export default function page() {
       setGamePlay(false);
       return setMessage("Congratulation,You win! ");
     } else if (guess > guessNo) {
-      return setMessage("Your number is Too greater than guessing Number");
+      return setMessage("Number is Too greater than guessing Number");
     } else if (guess < guessNo) {
-      return setMessage("Your number is Too smaller than guessing Number");
+      return setMessage("Nour number is Too smaller than guessing Number");
     }
   };
 
@@ -35,14 +38,29 @@ export default function page() {
   const checkNum = () => {
     const parsedGuess = parseInt(guess);
     if (isNaN(parsedGuess)) {
-      alert("Please enter a valid number between 1 and 100.");
+      toast.error("Please enter a valid number between 1 and 100.", {
+        theme: "light",
+        position: "top-center",
+        icon: true,
+        autoClose: 3000,
+      });
       setMessage("");
     } else {
       if (parsedGuess > 100) {
-        alert("The number should be smaller than 100");
+        toast.error("The number should be smaller than 100", {
+          theme: "light",
+          position: "top-center",
+          icon: true,
+          autoClose: 3000,
+        });
         return setMessage("The number should be smaller than 100");
       } else if (parsedGuess < 0) {
-        alert("The number should be greater than zero");
+        toast.error("The number should be greater than zero", {
+          theme: "light",
+          position: "top-center",
+          icon: true,
+          autoClose: 3000,
+        });
         return setMessage("The number should be greater than zero");
       } else {
         setGuessingArray((preArr) => [parsedGuess, ...preArr]);
@@ -84,11 +102,6 @@ export default function page() {
           <p>
             Previous guesses
             {`[ ${guessingArray} ]`}
-            {/* [
-            {guessingArray.map((guess, index) => (
-              <span key={index}> {guess} </span>
-            ))}
-            ] */}
           </p>
           <p>Guesses remaining {attempts}</p>
           <div className={`${style.newGame}`}>
@@ -103,6 +116,7 @@ export default function page() {
           </div>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 }
